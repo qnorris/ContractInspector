@@ -1,10 +1,20 @@
 import streamlit as st
 
-# Password check (replace 'your_password')
+# Add this right after your imports
 if 'authenticated' not in st.session_state:
-    password = st.text_input("Enter password:", type="password")
-    if password == "572985":
-        st.session_state.authenticated = True
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("🔒 Authentication Required")
+    password = st.text_input("Enter access password:", type="password")
+    
+    if password:
+        if password == "your_secure_password":  # CHANGE THIS TO YOUR PASSWORD
+            st.session_state.authenticated = True
+            st.experimental_rerun()
+        else:
+            st.error("⛔ Incorrect password. Access denied.")
+            st.stop()
     else:
         st.stop()
 import PyPDF2
