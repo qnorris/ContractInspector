@@ -1,3 +1,12 @@
+import streamlit as st
+
+# Password check (replace 'your_password')
+if 'authenticated' not in st.session_state:
+    password = st.text_input("Enter password:", type="password")
+    if password == "572985":
+        st.session_state.authenticated = True
+    else:
+        st.stop()
 import PyPDF2
 import streamlit as st
 import io
