@@ -1,22 +1,25 @@
 import streamlit as st
 
-# Add this right after your imports
+# Add this after your imports
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
     st.title("🔒 Authentication Required")
-    password = st.text_input("Enter access password:", type="password")
     
-    if password:
-        if password == "your_secure_password":  # CHANGE THIS TO YOUR PASSWORD
-            st.session_state.authenticated = True
-            st.experimental_rerun()
-        else:
-            st.error("⛔ Incorrect password. Access denied.")
-            st.stop()
-    else:
-        st.stop()
+    # Password input and submit button
+    with st.form("password_form"):
+        password = st.text_input("Enter access password:", type="password")
+        submitted = st.form_submit_button("Enter")
+        
+        if submitted:
+            if password == "your_secure_password":  # CHANGE THIS
+                st.session_state.authenticated = True
+                st.experimental_rerun()
+            else:
+                st.error("⛔ Incorrect password. Access denied.")
+                st.stop()
+    st.stop()
 import PyPDF2
 import streamlit as st
 import io
