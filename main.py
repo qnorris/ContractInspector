@@ -13,6 +13,20 @@ st.set_page_config(
 )
 
 # ----------------------------
+# Hide Streamlit Default UI Elements
+# ----------------------------
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .st-emotion-cache-18ni7ap {visibility: hidden;}  /* GitHub and Fork buttons */
+    .st-emotion-cache-6qob1r {visibility: hidden;}  /* Optional: extra top-right buttons */
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+# ----------------------------
 # Authentication state
 # ----------------------------
 if 'authenticated' not in st.session_state:
@@ -86,6 +100,3 @@ def main():
 # ----------------------------
 if st.session_state.authenticated:
     main()
-
-
-
