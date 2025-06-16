@@ -1,5 +1,5 @@
 import PyPDF2
-import streamlit as st
+import streamlit st
 import io
 import re
 from typing import Dict, List, Tuple
