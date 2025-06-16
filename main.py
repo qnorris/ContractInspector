@@ -24,7 +24,7 @@ if not st.session_state.authenticated:
         submitted = st.form_submit_button("Enter")
         
         if submitted:
-            if password == "102938":  # CHANGE THIS
+            if password == "Password":  # CHANGE THIS
                 st.session_state.authenticated = True
                 st.experimental_rerun()
             else:
