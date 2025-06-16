@@ -21,7 +21,7 @@ if not st.session_state.authenticated:
     password_input = st.text_input("Enter password:", type="password", key="pw")
     
     if st.button("Submit"):
-        if password_input == "your_password_here":  # CHANGE THIS
+        if password_input == "102938":  # CHANGE THIS
             st.session_state.authenticated = True
             st.rerun()
         else:
