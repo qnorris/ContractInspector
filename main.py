@@ -3,33 +3,41 @@ import streamlit as st
 import re
 from typing import Dict, Tuple
 
-# Configure the page
+# ----------------------------
+# Page configuration
+# ----------------------------
 st.set_page_config(
     page_title="LegalGuard AI", 
     page_icon="⚖️",
     layout="wide"
 )
 
-# Initialize session state for authentication
+# ----------------------------
+# Authentication state
+# ----------------------------
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 
-# Password protection
+# ----------------------------
+# Password Protection
+# ----------------------------
 if not st.session_state.authenticated:
     st.title("🔒 Authentication Required")
     password_input = st.text_input("Enter password:", type="password")
 
     if st.button("Submit"):
-        if password_input == "102938":  # Set your password here
+        if password_input == "102938":  # 🔐 Set your password here
             st.session_state.authenticated = True
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.error("Incorrect password")
             st.stop()
     else:
         st.stop()
 
-# Function to extract text from a PDF
+# ----------------------------
+# PDF Text Extraction
+# ----------------------------
 def extract_pdf_text(uploaded_file) -> Tuple[str, bool]:
     try:
         pdf_reader = PyPDF2.PdfReader(uploaded_file)
@@ -39,7 +47,9 @@ def extract_pdf_text(uploaded_file) -> Tuple[str, bool]:
         st.error(f"PDF Error: {str(e)}")
         return "", False
 
-# Function to analyze clauses in the NDA
+# ----------------------------
+# Clause Analysis
+# ----------------------------
 def analyze_nda_clauses(text: str) -> Dict[str, bool]:
     text_lower = text.lower()
     clauses = {
@@ -54,11 +64,13 @@ def analyze_nda_clauses(text: str) -> Dict[str, bool]:
         for name, patterns in clauses.items()
     }
 
-# Main application logic
+# ----------------------------
+# Main App
+# ----------------------------
 def main():
     st.title("⚖️ NDA Compliance Checker")
     uploaded_file = st.file_uploader("Upload NDA (PDF)", type="pdf")
-    
+
     if uploaded_file:
         text, success = extract_pdf_text(uploaded_file)
         if success:
@@ -69,8 +81,11 @@ def main():
         else:
             st.warning("Could not extract text from the uploaded PDF.")
 
-# Run app if authenticated
+# ----------------------------
+# Run Main App If Authenticated
+# ----------------------------
 if st.session_state.authenticated:
     main()
+
 
 
