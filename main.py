@@ -1,25 +1,47 @@
+import PyPDF2
 import streamlit as st
+import io
+import re
+from typing import Dict, List, Tuple
+from datetime import datetime
 
-# Add this after your imports
+# Configure the page
+st.set_page_config(
+    page_title="LegalGuard AI", 
+    page_icon="⚖️",
+    layout="wide"
+)
+
+# Password authentication - ADDED SECTION
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
     st.title("🔒 Authentication Required")
     
-    # Password input and submit button
+    # Create form for password submission
     with st.form("password_form"):
-        password = st.text_input("Enter access password:", type="password")
+        password = st.text_input("Enter access password:", type="password", key="pw_input")
         submitted = st.form_submit_button("Enter")
         
         if submitted:
-            if password == "your_secure_password":  # CHANGE THIS
+            if password == "your_secure_password":  # CHANGE THIS TO YOUR PASSWORD
                 st.session_state.authenticated = True
                 st.experimental_rerun()
             else:
                 st.error("⛔ Incorrect password. Access denied.")
                 st.stop()
-    st.stop()
+        else:
+            # Wait for button press
+            st.stop()
+
+# ORIGINAL APP CODE BELOW (unchanged)
+def extract_pdf_text(uploaded_file) -> Tuple[str, bool]:
+    # [Keep all your original functions exactly as they were]
+    # ... (rest of your existing code) ...
+
+if __name__ == "__main__":
+    main()
 import PyPDF2
 import streamlit as st
 import io
