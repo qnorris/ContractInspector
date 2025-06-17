@@ -31,22 +31,9 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .disclaimer-box {
-        border: 2px solid #ff4b4b;
-        border-radius: 5px;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: #fff8f8;
-    }
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-# Permanent disclaimer watermark
-st.markdown(
-    f'<div class="disclaimer-box">{DISCLAIMER_TEXT}</div>', 
-    unsafe_allow_html=True
-)
 
 # ----------------------------
 # Authentication state
@@ -64,7 +51,7 @@ if not st.session_state.authenticated:
     if st.button("Submit"):
         if password_input == "102938":  # 🔐 Set your password here
             st.session_state.authenticated = True
-            st.rerun()  # ✅ Updated method
+            st.rerun()
         else:
             st.error("Incorrect password")
             st.stop()
@@ -74,7 +61,6 @@ if not st.session_state.authenticated:
 # ----------------------------
 def extract_pdf_text(uploaded_file) -> Tuple[str, bool, str]:
     try:
-        # Create audit trail
         file_content = uploaded_file.getvalue()
         file_hash = hashlib.sha256(file_content).hexdigest()[:16]
 
@@ -207,4 +193,3 @@ def main():
 # ----------------------------
 if st.session_state.authenticated:
     main()
-
