@@ -64,7 +64,7 @@ if not st.session_state.authenticated:
     if st.button("Submit"):
         if password_input == "102938":  # 🔐 Set your password here
             st.session_state.authenticated = True
-            st.experimental_rerun()
+            st.rerun()  # ✅ Updated method
         else:
             st.error("Incorrect password")
             st.stop()
@@ -77,7 +77,7 @@ def extract_pdf_text(uploaded_file) -> Tuple[str, bool, str]:
         # Create audit trail
         file_content = uploaded_file.getvalue()
         file_hash = hashlib.sha256(file_content).hexdigest()[:16]
-        
+
         pdf_reader = PyPDF2.PdfReader(uploaded_file)
         text = "\n".join(page.extract_text() or "" for page in pdf_reader.pages)
         return text, bool(text.strip()), file_hash
@@ -123,11 +123,11 @@ def generate_compliance_report(filename: str, results: Dict[str, bool], file_has
         "EXECUTIVE SUMMARY:",
         "-" * 20
     ]
-    
+
     # Add results
     for clause, present in results.items():
         report.append(f"{clause}: {'PRESENT' if present else 'MISSING'}")
-    
+
     # Add legal safeguards
     report.extend([
         "",
@@ -147,7 +147,7 @@ def generate_compliance_report(filename: str, results: Dict[str, bool], file_has
         f"Report generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}",
         "=" * 60
     ])
-    
+
     return "\n".join(report)
 
 # ----------------------------
@@ -166,7 +166,7 @@ def main():
         st.divider()
         st.write("**Certifications**")
         st.caption("SOC 2 Type II • GDPR Compliant")
-    
+
     # Main interface
     st.title("⚖️ NDA Compliance Checker")
     uploaded_file = st.file_uploader("Upload NDA (PDF)", type="pdf")
@@ -176,26 +176,26 @@ def main():
         if success:
             with st.spinner("🔍 Analyzing clauses..."):
                 results = analyze_nda_clauses(text)
-            
+
             # Display results
             st.subheader("📋 Analysis Results")
             for clause, present in results.items():
                 st.write(f"{'✅' if present else '❌'} **{clause}**")
-            
+
             # Generate and offer report
             report = generate_compliance_report(
                 filename=uploaded_file.name,
                 results=results,
                 file_hash=file_hash
             )
-            
+
             st.download_button(
                 label="📄 Download Full Compliance Report",
                 data=report,
                 file_name=f"nda_compliance_{datetime.now().strftime('%Y%m%d')}.txt",
                 mime="text/plain"
             )
-            
+
             # Audit trail disclosure
             st.divider()
             st.caption(f"Audit Trail: Document hash `{file_hash}` | Tool version v{TOOL_VERSION}")
